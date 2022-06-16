@@ -1,5 +1,5 @@
 module Url.Query.Pipeline exposing
-    ( into
+    ( succeed
     , required, optional, with, withDefault, hardcoded
     )
 
@@ -31,7 +31,7 @@ for Url Query params:
 
     pipelineQuery : Query.Parser (Maybe MyQuery)
     pipelineQuery =
-        Pipeline.into MyQuery
+        Pipeline.succeed MyQuery
             |> Pipeline.required (Query.string "param_1")
             |> Pipeline.optional (Query.string "param_2")
             |> Pipeline.with (Query.custom "param_3" toIntList)
@@ -43,7 +43,7 @@ for Url Query params:
 
 # Start a Pipeline
 
-@docs into
+@docs succeed
 
 
 # Build a Pipeline
@@ -65,14 +65,14 @@ import Url.Parser.Query as Query
 
     myQuery : Query.Parser (Maybe MyQuery)
     myQuery =
-        Pipeline.into MyQuery
+        Pipeline.succeed MyQuery
             |> Pipeline.required (Query.string "param_1")
             |> Pipeline.optional (Query.string "param_2")
             |> Pipeline.required (Query.int "param_3")
 
 -}
-into : a -> Query.Parser (Maybe a)
-into a =
+succeed : a -> Query.Parser (Maybe a)
+succeed a =
     Query.custom "" (\_ -> Just a)
 
 
@@ -99,7 +99,7 @@ required a b =
 
     myQuery : Query.Parser (Maybe MyQuery)
     myQuery =
-        Pipeline.into MyQuery
+        Pipeline.succeed MyQuery
             |> Pipeline.with (Query.custom "param_1" identity)
             |> Pipeline.with (Query.enum "param_2" fruitOptions |> Query.map (Maybe.withDefault Apple))
 
@@ -121,7 +121,7 @@ with a b =
 
     myQuery : Query.Parser (Maybe MyQuery)
     myQuery =
-        Pipeline.into MyQuery
+        Pipeline.succeed MyQuery
             |> Pipeline.optional (Query.string "param_1")
             |> Pipeline.optional (Query.string "param_2")
 
@@ -147,7 +147,7 @@ optional =
 
     myQuery : Query.Parser (Maybe MyQuery)
     myQuery =
-        Pipeline.into MyQuery
+        Pipeline.succeed MyQuery
             |> Pipeline.required (Query.string "param_1")
             |> Pipeline.withDefault (Query.enum "param_2" fruitOptions) Apple
 
@@ -180,7 +180,7 @@ withDefault a default b =
 
     myQuery : Query.Parser (Maybe MyQuery)
     myQuery =
-        Pipeline.into MyQuery
+        Pipeline.succeed MyQuery
             |> Pipeline.required (Query.string "param_1")
             |> Pipeline.hardcoded 42
 
@@ -190,7 +190,7 @@ hardcoded :
     -> Query.Parser (Maybe (a -> b))
     -> Query.Parser (Maybe b)
 hardcoded val b =
-    required (into val) b
+    required (succeed val) b
 
 
 maybeAndMap : Maybe a -> Maybe (a -> b) -> Maybe b

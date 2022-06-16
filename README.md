@@ -31,7 +31,7 @@ type alias AuthCallback =
 
 authCallbackQuery : Query.Parser (Maybe AuthCallback)
 authCallbackQuery =
-    Pipeline.into AuthCallback
+    Pipeline.succeed AuthCallback
         |> Pipeline.required (Query.int "user_id")
         |> Pipeline.optional (Query.string "user_name")
         |> Pipeline.required (Query.string "id_token")
@@ -125,7 +125,7 @@ routeParser =
 
 pipelineQuery : Query.Parser (Maybe MyQuery)
 pipelineQuery =
-    Pipeline.into MyQuery
+    Pipeline.succeed MyQuery
         |> Pipeline.required (Query.string "param_1")
         |> Pipeline.optional (Query.string "param_2")
         |> Pipeline.with (Query.custom "param_3" toIntList)

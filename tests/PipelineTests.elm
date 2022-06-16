@@ -18,7 +18,7 @@ tests =
                     parse
                         { params = "foo=a&bar=b"
                         , parser =
-                            Pipeline.into Two
+                            Pipeline.succeed Two
                                 |> Pipeline.required (Query.string "foo")
                                 |> Pipeline.optional (Query.string "bar")
                         }
@@ -33,7 +33,7 @@ tests =
                     parse
                         { params = "bar=b"
                         , parser =
-                            Pipeline.into Tuple.pair
+                            Pipeline.succeed Two
                                 |> Pipeline.required (Query.string "foo")
                                 |> Pipeline.optional (Query.string "bar")
                         }
@@ -43,7 +43,7 @@ tests =
                     parse
                         { params = "foo=a"
                         , parser =
-                            Pipeline.into Two
+                            Pipeline.succeed Two
                                 |> Pipeline.required (Query.string "foo")
                                 |> Pipeline.optional (Query.string "bar")
                         }
@@ -60,7 +60,7 @@ tests =
                     parse
                         { params = "tags[]=dogs&tags[]=cats&ids[]=4&ids[]=5"
                         , parser =
-                            Pipeline.into Two
+                            Pipeline.succeed Two
                                 |> Pipeline.with (Query.custom "tags[]" identity)
                                 |> Pipeline.with (Query.custom "ids[]" (List.filterMap String.toInt))
                         }
@@ -75,7 +75,7 @@ tests =
                     parse
                         { params = "fruit=unknown"
                         , parser =
-                            Pipeline.into One
+                            Pipeline.succeed One
                                 |> Pipeline.with (fruitQueryWithDefault Orange)
                         }
                         |> Expect.equal
@@ -88,7 +88,7 @@ tests =
                     parse
                         { params = "fruit=unknown"
                         , parser =
-                            Pipeline.into Two
+                            Pipeline.succeed Two
                                 |> Pipeline.withDefault fruitQuery Apple
                                 |> Pipeline.withDefault (Query.int "quantity") 1
                         }
@@ -105,7 +105,7 @@ tests =
                     parse
                         { params = "foo=foo"
                         , parser =
-                            Pipeline.into Two
+                            Pipeline.succeed Two
                                 |> Pipeline.hardcoded 42
                                 |> Pipeline.required (Query.string "foo")
                         }
