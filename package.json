@@ -1,0 +1,26 @@
+{
+  "name": "elm-url-query-pipeline",
+  "version": "1.0.0",
+  "description": "Parse Url Queries Pipeline style",
+  "scripts": {
+    "test": "elm-test",
+    "docs": "elm-doc-preview",
+    "docs:verify": "elm make --docs docs.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/andrewMacmurray/elm-url-query-pipeline.git"
+  },
+  "author": "Andrew MacMurray",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/andrewMacmurray/elm-url-query-pipeline/issues"
+  },
+  "homepage": "https://github.com/andrewMacmurray/elm-url-query-pipeline#readme",
+  "devDependencies": {
+    "elm": "^0.19.1-5",
+    "elm-doc-preview": "^5.0.5",
+    "elm-format": "^0.8.5",
+    "elm-test": "^0.19.1-revision7"
+  }
+}
