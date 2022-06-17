@@ -38,6 +38,24 @@ authCallbackQuery =
         |> Pipeline.required (Query.int "id_token_expires_at")
         |> Pipeline.required (Query.string "refresh_token")
         
+
+
+```
+
+Examples where: `parseCallbackUrl : String -> Maybe AuthCallback`
+
+```elm
+parseCallbackUrl "/?user_id=1&id_token=abc&id_token_expires_at=123&refresh_token=bca"
+    == Just
+          { userId = 1
+          , userName = Nothing
+          , idToken = "abc" 
+          , idTokenExpiresAt = 123
+          , refreshToken = "bca"
+          }
+
+parseCallbackUrl "/?id_token=abc&refresh_token=bca"          
+    == Nothing
 ```
 
 ## Why?
@@ -98,6 +116,7 @@ elm install andrewMacmurray/elm-url-query-pipeline
 Use with your regular `elm/url` parsers
 
 ```elm
+import Url exposing (Url)
 import Url.Parser as Parser exposing ((<?>), s, top)
 import Url.Parser.Query as Query
 import Url.Query.Pipeline as Pipeline
@@ -109,32 +128,49 @@ type Route
 
 
 type alias MyQuery =
-    { param1 : String
-    , param2 : Maybe String
-    , param3 : List Int
+    { one : String
+    , two : Maybe String
+    , three : List Int
     }
 
 
-routeParser : Parser.Parser (Route -> a) a
-routeParser =
+query : Query.Parser (Maybe MyQuery)
+query =
+    Pipeline.succeed MyQuery
+        |> Pipeline.required (Query.string "one")
+        |> Pipeline.optional (Query.string "two")
+        |> Pipeline.with (Query.custom "three" (List.filterMap String.toInt))
+
+
+routes : Parser.Parser (Route -> a) a
+routes =
     Parser.oneOf
-        [ Parser.map Home (top <?> pipelineQuery)
+        [ Parser.map Home (top <?> query)
         , Parser.map AnotherRoute (s "another-route")
         ]
 
 
-pipelineQuery : Query.Parser (Maybe MyQuery)
-pipelineQuery =
-    Pipeline.succeed MyQuery
-        |> Pipeline.required (Query.string "param_1")
-        |> Pipeline.optional (Query.string "param_2")
-        |> Pipeline.with (Query.custom "param_3" toIntList)
-
-
-toIntList : List String -> List Int
-toIntList =
-    List.filterMap String.toInt
+fromString : String -> Maybe Route
+fromString =
+    Url.fromString >> Maybe.andThen (Parser.parse routes)
     
+```
+
+Some examples from above:
+
+```elm
+fromString "http://example/another-route" == Just AnotherRoute
+
+fromString "http://example?one=hello&two=world&three=1&three=2"
+    == Just
+        (Home
+            (Just
+                { one = "hello"
+                , two = Just "world"
+                , three = [ 1, 2 ]
+                }
+            )
+        )
 ```
 
 ## Develop Locally
