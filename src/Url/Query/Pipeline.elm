@@ -65,6 +65,13 @@ The examples below use the function `parse`
     parse : Query.Parser (Maybe MyQuery) -> String -> Maybe MyQuery
 
 
+## Why is the output `Maybe MyQuery`?
+
+`elm/url`'s [Query Parsers](https://package.elm-lang.org/packages/elm/url/latest/Url-Parser-Query) all return `Maybe a`.
+
+The `Pipeline` functions is also `Maybe a` to maintain compatibility with `elm/url`.
+
+
 # Start a Pipeline
 
 @docs succeed
