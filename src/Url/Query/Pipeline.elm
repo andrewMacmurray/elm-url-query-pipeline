@@ -83,6 +83,7 @@ The `Pipeline` functions is also `Maybe a` to maintain compatibility with `elm/u
 
 -}
 
+import Maybe
 import Url.Parser.Query as Query
 
 
