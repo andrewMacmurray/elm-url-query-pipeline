@@ -5,7 +5,9 @@
   "scripts": {
     "test": "elm-test",
     "docs": "elm-doc-preview",
-    "docs:verify": "elm make --docs docs.json"
+    "docs:verify": "elm make --docs docs.json",
+    "review": "elm-review --fix",
+    "review:ci": "elm-review"
   },
   "repository": {
     "type": "git",
@@ -19,8 +21,8 @@
   "homepage": "https://github.com/andrewMacmurray/elm-url-query-pipeline#readme",
   "devDependencies": {
     "elm": "^0.19.1-5",
-    "elm-doc-preview": "^5.0.5",
-    "elm-format": "^0.8.5",
-    "elm-test": "^0.19.1-revision7"
+    "elm-doc-preview": "^1.0.7",
+    "elm-review": "^2.10.2",
+    "elm-test": "^0.19.1-revision12"
   }
 }
