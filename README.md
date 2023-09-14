@@ -37,7 +37,7 @@ authCallbackQuery =
         |> Pipeline.required (Query.string "id_token")
         |> Pipeline.required (Query.int "id_token_expires_at")
         |> Pipeline.required (Query.string "refresh_token")
-        
+
 
 
 ```
@@ -49,12 +49,12 @@ parseCallbackUrl "/?user_id=1&id_token=abc&id_token_expires_at=123&refresh_token
     == Just
           { userId = 1
           , userName = Nothing
-          , idToken = "abc" 
+          , idToken = "abc"
           , idTokenExpiresAt = 123
           , refreshToken = "bca"
           }
 
-parseCallbackUrl "/?id_token=abc&refresh_token=bca"          
+parseCallbackUrl "/?id_token=abc&refresh_token=bca"
     == Nothing
 ```
 
@@ -66,6 +66,9 @@ the data you need doesn't make sense without them:
 e.g. the same query from above without pipelines:
 
 ```elm
+import Url.Parser.Query as Query -- from elm/url
+
+
 type alias AuthCallback =
     { userId : Int
     , userName : Maybe String
@@ -98,8 +101,14 @@ authCallbackQueryOld =
         (Query.string "id_token")
         (Query.int "id_token_expires_at")
         (Query.string "refresh_token")
-        
+
 ```
+
+## Why is the output `Maybe MyQuery`?
+
+`elm/url`'s [Query Parsers](https://package.elm-lang.org/packages/elm/url/latest/Url-Parser-Query) all return `Maybe a`.
+
+The `Pipeline` functions is also `Maybe a` to maintain compatibility with `elm/url`.
 
 ## How?
 
@@ -153,7 +162,7 @@ routes =
 fromString : String -> Maybe Route
 fromString =
     Url.fromString >> Maybe.andThen (Parser.parse routes)
-    
+
 ```
 
 Some examples from above:
@@ -175,19 +184,19 @@ fromString "http://example?one=hello&two=world&three=1&three=2"
 
 ## Develop Locally
 
-install dependencies
+install dependencies:
 
 ```shell
 npm install
 ```
 
-run the tests
+run the tests:
 
 ```shell
 npm test
 ```
 
-preview the docs
+preview the docs:
 
 ```shell
 npm run docs
